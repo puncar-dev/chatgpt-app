@@ -3,6 +3,9 @@ const axios = require('axios');
 // Access the API key from the environment variables
 const apiKey = process.env.OPENAI_API_KEY;
 
+// Print the API key to the console
+console.log("API Key:", apiKey);
+
 // Define a function to interact with the OpenAI API
 async function promptGPT(prompt) {
   try {
