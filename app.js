@@ -2,14 +2,14 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
-const { OpenAIApi } = require('openai'); // Correct import statement
+const { OpenAI } = require('openai'); // Import OpenAI
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 const apiKey = process.env.OPENAI_API_KEY;
 
-const openai = new OpenAIApi({ apiKey }); // Create a new instance with the correct constructor
+const openai = new OpenAI({ apiKey }); // Create a new instance of OpenAI
 
 async function promptGPT(prompt) {
     try {
