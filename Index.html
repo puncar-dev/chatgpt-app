@@ -46,7 +46,7 @@
                     content: promptText,
                 };
 
-                // Combine the system and user messages
+                // Combine the system and user messages into an array
                 const messages = [systemMessage, userMessage];
 
                 // Send the messages to your Node.js server
@@ -57,14 +57,15 @@
                     },
                     body: JSON.stringify({ messages: messages }), // Send the combined messages
                 })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        // Display the response in the output div
-                        outputDiv.textContent = data.response;
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error.message);
-                    });
+                .then((response) => response.json())
+                .then((data) => {
+                    // Display the response in the output div
+                    outputDiv.textContent = data.response;
+                })
+                .catch((error) => {
+                    console.error("Error:", error.message);
+                });
+
             });
         });
     </script>

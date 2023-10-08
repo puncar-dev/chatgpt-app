@@ -2,19 +2,19 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
-const { OpenAI } = require('openai'); // Import OpenAI
+const { OpenAIApi } = require('openai'); // Import OpenAI (note the import change to OpenAIApi)
 
 app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Parse JSON request bodies
 
 const apiKey = process.env.OPENAI_API_KEY;
 
-const openai = new OpenAI({ apiKey }); // Create a new instance of OpenAI
+const openai = new OpenAIApi({ key: apiKey }); // Create a new instance of OpenAIApi
 
 async function promptGPT(prompt) {
     try {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo-0613', // Specify your desired chat model
+        const response = await openai.completions.create({
+            engine: 'gpt-3.5-turbo', // Specify your desired chat model (note the model name change)
             messages: [
                 { role: 'system', content: 'You are a helpful assistant.' },
                 { role: 'user', content: prompt }, // User message
@@ -26,7 +26,7 @@ async function promptGPT(prompt) {
         // Extract and display the assistant's response
         const assistantResponse = response.choices.find((message) => message.role === 'assistant');
         if (assistantResponse) {
-            return assistantResponse.content;
+            return assistantResponse.text; // Use 'text' to get the content of the response
         } else {
             // Handle the case where there is no assistant response
             return 'No response from the assistant.';
@@ -36,10 +36,6 @@ async function promptGPT(prompt) {
         throw error;
     }
 }
-
-
-
-
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
