@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
-const { Configuration, OpenAIApi } = require('openai');
+const { OpenAIApi } = require('openai');
+
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
