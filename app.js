@@ -13,7 +13,7 @@ const openai = new OpenAI({ apiKey }); // Create a new instance of OpenAI
 
 async function promptGPT(prompt) {
     try {
-        const response = await openai.createCompletion({
+        const response = await openai.completions.create({
             model: 'gpt-3.5-turbo-0613', // Specify your desired model
             prompt: prompt,
             max_tokens: 50,
@@ -26,6 +26,7 @@ async function promptGPT(prompt) {
         throw error;
     }
 }
+
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
