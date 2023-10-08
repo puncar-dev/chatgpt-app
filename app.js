@@ -6,6 +6,7 @@ dotenv.config();
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Add this line to parse JSON requests
 
 const apiKey = process.env.OPENAI_API_KEY;
 
@@ -33,11 +34,12 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/get-completion', async (req, res) => {
+// Add the /api/prompt endpoint for handling prompt requests
+app.post('/api/prompt', async (req, res) => {
     const prompt = req.body.prompt;
     try {
         const output = await promptGPT(prompt);
-        res.json({ output });
+        res.json({ response: output }); // Send the response as JSON
     } catch (error) {
         res.status(500).json({ error: 'An error occurred' });
     }
