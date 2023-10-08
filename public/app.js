@@ -1,30 +1,49 @@
 const axios = require('axios');
+const express = require('express');
+const app = express();
+const dotenv = require('dotenv');
+dotenv.config();
 
-// Access the API key from the environment variables
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+
 const apiKey = process.env.OPENAI_API_KEY;
 
-// Print the API key to the console
-console.log("API Key:", apiKey);
-
-// Define a function to interact with the OpenAI API
 async function promptGPT(prompt) {
-  try {
-    const response = await axios.post('https://api.openai.com/v1/engines/davinci/completions', {
-      prompt,
-      max_tokens: 50, // Adjust as needed
-    }, {
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+        const response = await axios.post('https://api.openai.com/v1/engines/davinci/completions', {
+            prompt,
+            max_tokens: 50,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+            },
+        });
 
-    const output = response.data.choices[0].text;
-    console.log(output);
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
+        const output = response.data.choices[0].text;
+        return output;
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw error;
+    }
 }
 
-// Example usage:
-promptGPT('Translate the following English text to French: "Hello, world!"');
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.post('/get-completion', async (req, res) => {
+    const prompt = req.body.prompt;
+    try {
+        const output = await promptGPT(prompt);
+        res.json({ output });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
