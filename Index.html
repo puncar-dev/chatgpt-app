@@ -40,13 +40,22 @@
                     content: 'You are a helpful assistant.',
                 };
 
-                // Send the prompt and system message to your Node.js server
+                // Create a user message
+                const userMessage = {
+                    role: 'user',
+                    content: promptText,
+                };
+
+                // Combine the system and user messages
+                const messages = [systemMessage, userMessage];
+
+                // Send the messages to your Node.js server
                 fetch("/api/prompt", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ prompt: promptText, system: systemMessage }),
+                    body: JSON.stringify({ messages: messages }), // Send the combined messages
                 })
                     .then((response) => response.json())
                     .then((data) => {
