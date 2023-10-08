@@ -11,5 +11,35 @@
         <button type="submit">Submit</button>
     </form>
     <div id="output"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("promptForm");
+            const promptInput = document.getElementById("prompt");
+            const outputDiv = document.getElementById("output");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const promptText = promptInput.value;
+
+                // Send the prompt to your Node.js server
+                fetch("/api/prompt", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ prompt: promptText }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Display the response in the output div
+                        outputDiv.textContent = data.response;
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error.message);
+                    });
+            });
+        });
+    </script>
 </body>
 </html>
