@@ -15,17 +15,27 @@ async function promptGPT(prompt) {
     try {
         const response = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo-0613', // Specify your desired chat model
-            messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
+            messages: [
+                { role: 'system', content: 'You are a helpful assistant.' },
+                { role: 'user', content: prompt }, // User message
+            ],
             max_tokens: 50,
         });
 
-        const output = response.choices[0].message.content;
-        return output;
+        // Extract and display the assistant's response
+        const assistantResponse = response.choices.find((message) => message.role === 'assistant');
+        if (assistantResponse) {
+            return assistantResponse.content;
+        } else {
+            // Handle the case where there is no assistant response
+            return 'No response from the assistant.';
+        }
     } catch (error) {
         console.error('Error:', error.message);
         throw error;
     }
 }
+
 
 
 
