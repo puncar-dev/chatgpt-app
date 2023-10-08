@@ -7,7 +7,7 @@
       "start": "node app.js",
       "build": "npm install && npm run build:app",
       "build:app": "cp app.js public/app.js"
-    }
+    },
     
     "keywords": [],
     "author": "",
