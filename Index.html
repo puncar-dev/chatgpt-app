@@ -34,13 +34,19 @@
                 event.preventDefault();
                 const promptText = promptInput.value;
 
-                // Send the prompt to your Node.js server
+                // Create a system message
+                const systemMessage = {
+                    role: 'system',
+                    content: 'You are a helpful assistant.',
+                };
+
+                // Send the prompt and system message to your Node.js server
                 fetch("/api/prompt", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ prompt: promptText }),
+                    body: JSON.stringify({ prompt: promptText, system: systemMessage }),
                 })
                     .then((response) => response.json())
                     .then((data) => {
