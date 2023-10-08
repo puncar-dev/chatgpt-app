@@ -2,22 +2,32 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
-const openai = require('openai');
+const { OpenAIApi } = require('openai');
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 const apiKey = process.env.OPENAI_API_KEY;
 
+const openai = new OpenAIApi({ apiKey });
+
 async function promptGPT(prompt) {
     try {
-        const response = await openai.completions.create({
+        const response = await openai.createCompletion({
             model: 'gpt-3.5-turbo', // Specify your desired model
-            prompt: prompt,
-            max_tokens: 50,
+            messages: [
+                {
+                    role: 'system',
+                    content: 'You are a helpful assistant.',
+                },
+                {
+                    role: 'user',
+                    content: prompt,
+                },
+            ],
         });
 
-        const output = response.choices[0].text;
+        const output = response.choices[0].message.content;
         return output;
     } catch (error) {
         console.error('Error:', error.message);
