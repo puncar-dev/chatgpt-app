@@ -13,19 +13,20 @@ const openai = new OpenAI({ apiKey }); // Create a new instance of OpenAI
 
 async function promptGPT(prompt) {
     try {
-        const response = await openai.completions.create({
-            model: 'gpt-3.5-turbo-0613', // Specify your desired model
-            prompt: prompt,
+        const response = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo-0613', // Specify your desired chat model
+            messages: [{ role: 'system', content: 'You are a helpful assistant.' }, { role: 'user', content: prompt }],
             max_tokens: 50,
         });
 
-        const output = response.choices[0].text;
+        const output = response.choices[0].message.content;
         return output;
     } catch (error) {
         console.error('Error:', error.message);
         throw error;
     }
 }
+
 
 
 app.get('/', (req, res) => {
