@@ -18,6 +18,7 @@ async function promptGPT(prompt) {
             messages: [
                 { role: 'system', content: 'You are a helpful assistant.' },
                 { role: 'user', content: prompt }, // User message
+                // Optionally, you can add more user and assistant messages as the conversation progresses.
             ],
             max_tokens: 50,
         });
@@ -35,6 +36,7 @@ async function promptGPT(prompt) {
         throw error;
     }
 }
+
 
 
 
